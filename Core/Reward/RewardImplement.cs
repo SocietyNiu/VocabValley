@@ -1,0 +1,105 @@
+﻿using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Buffs;
+using StardewValley.GameData.Crops;
+using StardewValley.TerrainFeatures;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using VocabValley.UI;
+using static StardewValley.Minigames.TargetGame;
+
+namespace VocabValley.Core.Reward
+{
+    static class RewardImplement
+    {
+        public static void addMoney(int amount)
+        {
+            if (!Context.IsWorldReady)
+                return; 
+
+            Game1.player.Money += amount;
+        }
+
+        public static void waterCrops()
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            foreach(var farm in Game1.locations.OfType<Farm>())
+                foreach(var pair in farm.terrainFeatures.Pairs)
+                    if (pair.Value is HoeDirt d) d.state.Value = HoeDirt.watered;
+        }
+
+
+        public static void grantRandomFriendship(int amount)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            // 选取可社交的 NPC 列表
+            List<NPC> candidates = Utility.getAllVillagers()
+                .Where(npc => npc.CanSocialize && !npc.IsInvisible)
+                .ToList();
+
+            Random rng = new(Guid.NewGuid().GetHashCode());
+            NPC target = candidates[rng.Next(candidates.Count)];
+
+            Game1.player.changeFriendship(amount, target);
+
+            Game1.addHUDMessage(new HUDMessage(
+            $"你与 {target.displayName} 的关系提升了 0.5 颗心。", 2));
+
+        }
+
+        public static void grantRandomSeeds(int amount)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            string season = Game1.currentSeason.ToLower();
+            Random rng = new(Guid.NewGuid().GetHashCode());
+
+            if (RewardConfig.SeasonSeeds.TryGetValue(season, out string[] pool) && pool.Length > 0)
+            {
+                string seedId = pool[rng.Next(pool.Length)];
+                var seed = new StardewValley.Object(seedId, amount);
+                if (!Game1.player.addItemToInventoryBool(seed, true))
+                    Game1.createItemDebris(seed, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+            }
+        }
+
+        public static void grantLuckBuff(IModHelper Helper,int amount)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            Buff buff = new Buff(
+                id: "VocabValleyLuckBuff",
+                displayName: "逆天改命",
+                iconTexture: Helper.GameContent.Load<Texture2D>("TileSheets/BuffsIcons"),
+                iconSheetIndex: 4,
+                duration: Buff.ENDLESS,
+                effects: new BuffEffects()
+                {
+                    LuckLevel = { 3.0f }
+                }
+            );
+
+            Game1.player.applyBuff(buff);
+        }
+
+        public static void nothing()
+        {
+            Game1.addHUDMessage(new HUDMessage(
+            $"你认为学习的动力不来自任何奖励", 2));
+            return;
+        }
+
+    }
+}

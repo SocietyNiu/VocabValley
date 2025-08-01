@@ -1,0 +1,10 @@
+{
+  "Name": "VocabValley",
+  "Author": "Haha Gaming",
+  "Version": "0.0.1",
+  "Description": "增加背单词的功能",
+  "UniqueID": "HahaGaming.VocabValley",
+  "EntryDll": "VocabValley.dll",
+  "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": []
+}
