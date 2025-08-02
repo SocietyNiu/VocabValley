@@ -54,14 +54,14 @@ namespace VocabValley.Core
             vocabManager = new VocabManager(Helper, Monitor);
             wordsManager = new WordsManager(Helper, Monitor);
             savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager);
-            levelManager = new LevelManager(Helper, Monitor, wordsManager, 10);
+            levelManager = new LevelManager(Helper, Monitor, wordsManager, 30);
         }
 
         private bool onLearningPageCall(GameLocation location, string[] args, Farmer player, Point point)
         {
             // 注册普通层学习事件
             LearningPageManager learningPageManager 
-                    = new LearningPageManager(Helper, Monitor, wordsManager, 3, levelManager);
+                    = new LearningPageManager(Helper, Monitor, wordsManager, 10, levelManager);
             learningPageManager.onLearningPageCall();
             return true;
         }
