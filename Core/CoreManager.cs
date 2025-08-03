@@ -45,7 +45,6 @@ namespace VocabValley.Core
         // 积分管理器
         private PointsManager pointsManager = null;
 
-
         public CoreManager(IModHelper helper, IMonitor monitor)
         {
             Helper = helper;
@@ -64,7 +63,8 @@ namespace VocabValley.Core
             wordsManager = new WordsManager(Helper, Monitor);
             levelManager = new LevelManager(Helper, Monitor, wordsManager, 30);
             pointsManager = new PointsManager(Helper, Monitor);
-            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager);
+            settingManager = new SettingManager(Helper, Monitor);
+            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager);
         }
 

@@ -17,9 +17,10 @@ namespace VocabValley.Core.Saving
         private readonly IMonitor Monitor;
 
         private List<Word> words;
-        public WordsManager wordsManager;
-        public VocabManager vocabManager;
-        public PointsManager pointsManager;
+        private WordsManager wordsManager;
+        private VocabManager vocabManager;
+        private PointsManager pointsManager;
+        private SettingManager settingManager;
 
         private Dictionary<int, SaveState> _progress = null!;
         private Config _config;
@@ -29,7 +30,7 @@ namespace VocabValley.Core.Saving
 
         public SavingManager(IModHelper helper, IMonitor monitor,
             VocabManager vocabManager, WordsManager wordsManager,
-            PointsManager pointsManager)
+            PointsManager pointsManager, SettingManager settingManager)
         {
             Helper = helper;
             Monitor = monitor;
@@ -44,6 +45,7 @@ namespace VocabValley.Core.Saving
             {
                 updateProgress(fileName);
             };
+            this.settingManager = settingManager;
         }
 
 
@@ -91,6 +93,7 @@ namespace VocabValley.Core.Saving
 
             _otherState = Helper.Data.ReadSaveData<OtherState>("otherState") ?? new OtherState();
             pointsManager.points = _otherState.Points;
+            settingManager.settingState = _otherState.SettingState;
         }
 
         public void onSaving(object? s, SavingEventArgs e)
@@ -112,6 +115,7 @@ namespace VocabValley.Core.Saving
             Helper.Data.WriteSaveData("allProgress", _allProgress);
 
             _otherState.Points = pointsManager.points;
+            _otherState.SettingState = settingManager.settingState;
             Helper.Data.WriteSaveData("otherState", _otherState);
 
         }

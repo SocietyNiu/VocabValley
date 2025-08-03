@@ -14,7 +14,7 @@ namespace VocabValley.Core.Setting
         private readonly IModHelper Helper;
         private readonly IMonitor Monitor;
 
-        private bool isPause = false;
+        public SettingState settingState;
 
         public SettingManager(IModHelper helper, IMonitor monitor)
         {
@@ -28,13 +28,13 @@ namespace VocabValley.Core.Setting
         {
             if (!Context.IsWorldReady) return;
 
-            this.isPause = isPause;
+            settingState.isPause = isPause;
         }
 
         private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             // 每帧把计时清零，永远无法到达下一个时间
-            if (isPause)
+            if (settingState!=null && settingState.isPause)
                 Game1.gameTimeInterval = 0;
         }
     }

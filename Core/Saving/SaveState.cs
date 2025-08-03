@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VocabValley.Core.Setting;
 
 namespace VocabValley.Core.Saving
 {
@@ -19,7 +20,6 @@ namespace VocabValley.Core.Saving
     public record OtherState
     {
         public int Points { get; set; }
-        public bool isWrongWordsPageLocked { get; set; }
-        public bool isCellarLocked { get; set; }
+        public SettingState SettingState {get; set;}
     }
 }
