@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Model;
 using VocabValley.Core.Points;
+using VocabValley.Core.Setting;
 using VocabValley.UI;
 
 namespace VocabValley.Core.Statistics
@@ -17,23 +18,23 @@ namespace VocabValley.Core.Statistics
         private readonly IMonitor Monitor;
 
         private WrongWordPage wrongWordPage;
-        private WordsManager wordsManager;
+        
         private PointsManager pointsManager;
+        private SettingManager settingManager;
 
         int totalPage = 1;
         int currentPage = 1;
-
-        bool isLocked = true;
 
         List<Word> wrongWords;
 
         int pageCount = 8;
 
-        public WrongWordsManager(IModHelper helper, IMonitor monitor, WordsManager wordsManager, PointsManager pointsManager) 
+        public WrongWordsManager(IModHelper helper, IMonitor monitor, WordsManager wordsManager, PointsManager pointsManager,
+            SettingManager settingManager) 
         {
             wrongWordPage = new WrongWordPage(helper, monitor);
-            this.wordsManager = wordsManager;
             this.pointsManager = pointsManager;
+            this.settingManager = settingManager;
             wrongWords = wordsManager.getWrongWords();
             totalPage = wrongWords.Count() / pageCount + 1;
 
@@ -49,7 +50,7 @@ namespace VocabValley.Core.Statistics
         
         private void checkLockState()
         {
-            if (!isLocked)
+            if (!settingManager.settingState.isWrongWordsPageLocked)
             {
                 show();
                 return;
@@ -90,24 +91,24 @@ namespace VocabValley.Core.Statistics
         }
         public void unLock()
         {
-            if (isLocked)
+            if (settingManager.settingState.isWrongWordsPageLocked)
             {
                 if (pointsManager.points < 10)
                 {
-                    Game1.drawObjectDialogue("地下室需要100知识碎片解锁");
+                    Game1.drawObjectDialogue("错题本需要100知识碎片解锁");
                     return;
                 }
                 else
                 {
                     pointsManager.changePoints(-10);
                     Game1.playSound("money");
-                    isLocked = false;
-                    Game1.drawObjectDialogue("地下室已解锁");
+                    settingManager.settingState.isWrongWordsPageLocked = false;
+                    Game1.drawObjectDialogue("错题本已解锁");
                 }
             }
             else
             {
-                Game1.drawObjectDialogue("地下室已解锁");
+                Game1.drawObjectDialogue("错题本已解锁");
             }
         }
 

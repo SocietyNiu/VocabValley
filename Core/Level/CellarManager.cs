@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Points;
+using VocabValley.Core.Setting;
 
 namespace VocabValley.Core.Level
 {
@@ -14,21 +15,22 @@ namespace VocabValley.Core.Level
         private readonly IModHelper Helper;
         private readonly IMonitor Monitor;
 
-        private bool isLocked = true;
-
         private PointsManager pointsManager;
+        private SettingManager settingManager;
 
-        public CellarManager(IModHelper helper, IMonitor monitor, PointsManager pointsManager)
+        public CellarManager(IModHelper helper, IMonitor monitor, 
+            PointsManager pointsManager, SettingManager settingManager)
         {
             Helper = helper;
             Monitor = monitor;
 
             this.pointsManager = pointsManager;
+            this.settingManager = settingManager;
         }
 
         public void onWarpCellar()
         {
-            if (!isLocked)
+            if (!settingManager.settingState.isCellarLocked)
             {
                 Game1.warpFarmer("BabelTowerCellar", 7, 14, false);
                 return;
@@ -64,7 +66,7 @@ namespace VocabValley.Core.Level
 
         public void unLockCellar()
         {
-            if (isLocked)
+            if (settingManager.settingState.isCellarLocked)
             {
                 if (pointsManager.points < 100)
                 {
@@ -75,7 +77,7 @@ namespace VocabValley.Core.Level
                 {
                     pointsManager.changePoints(-100);
                     Game1.playSound("money");
-                    isLocked = false;
+                    settingManager.settingState.isCellarLocked = false;
                     Game1.drawObjectDialogue("地下室已解锁");
                 }
             }

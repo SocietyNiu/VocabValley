@@ -9,7 +9,7 @@ namespace VocabValley.Core.Setting
     public record SettingState
     {
         public bool isPause = false;
-        public bool isWrongWordsPageLocked { get; set; }
-        public bool isCellarLocked { get; set; }
+        public bool isWrongWordsPageLocked = true;
+        public bool isCellarLocked = true;
     }
 }

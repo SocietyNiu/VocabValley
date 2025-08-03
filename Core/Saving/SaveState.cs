@@ -19,7 +19,7 @@ namespace VocabValley.Core.Saving
     }
     public record OtherState
     {
-        public int Points { get; set; }
-        public SettingState SettingState {get; set;}
+        public int Points { get; set; } = new int();
+        public SettingState SettingState { get; set; } = new SettingState();
     }
 }
