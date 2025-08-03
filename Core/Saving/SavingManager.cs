@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Model;
+using VocabValley.Core.Points;
 using VocabValley.Core.Setting;
 
 namespace VocabValley.Core.Saving
@@ -18,13 +19,17 @@ namespace VocabValley.Core.Saving
         private List<Word> words;
         public WordsManager wordsManager;
         public VocabManager vocabManager;
+        public PointsManager pointsManager;
 
         private Dictionary<int, SaveState> _progress = null!;
         private Config _config;
         private Dictionary<string, Dictionary<int, SaveState>> _allProgress;
+        private OtherState _otherState;
 
-        public SavingManager(IModHelper helper, IMonitor monitor, 
-            VocabManager vocabManager, WordsManager wordsManager)
+
+        public SavingManager(IModHelper helper, IMonitor monitor,
+            VocabManager vocabManager, WordsManager wordsManager,
+            PointsManager pointsManager)
         {
             Helper = helper;
             Monitor = monitor;
@@ -34,6 +39,7 @@ namespace VocabValley.Core.Saving
 
             this.wordsManager = wordsManager;
             this.vocabManager = vocabManager;
+            this.pointsManager = pointsManager;
             this.vocabManager.OnVocabChanged += (string fileName) =>
             {
                 updateProgress(fileName);
@@ -82,6 +88,9 @@ namespace VocabValley.Core.Saving
             }
 
             // TODO: 清理词库已删除的词 
+
+            _otherState = Helper.Data.ReadSaveData<OtherState>("otherState") ?? new OtherState();
+            pointsManager.points = _otherState.Points;
         }
 
         public void onSaving(object? s, SavingEventArgs e)
@@ -101,7 +110,10 @@ namespace VocabValley.Core.Saving
 
             _allProgress[_config.fileName] = _progress;
             Helper.Data.WriteSaveData("allProgress", _allProgress);
-            
+
+            _otherState.Points = pointsManager.points;
+            Helper.Data.WriteSaveData("otherState", _otherState);
+
         }
         public void updateProgress(string fileName)
         {

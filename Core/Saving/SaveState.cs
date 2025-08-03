@@ -19,5 +19,7 @@ namespace VocabValley.Core.Saving
     public record OtherState
     {
         public int Points { get; set; }
+        public bool isWrongWordsPageLocked { get; set; }
+        public bool isCellarLocked { get; set; }
     }
 }

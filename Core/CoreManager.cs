@@ -45,8 +45,6 @@ namespace VocabValley.Core
         // 积分管理器
         private PointsManager pointsManager = null;
 
-        // 错题本管理器
-        private WrongWordsManager wrongWordsManager = null;
 
         public CoreManager(IModHelper helper, IMonitor monitor)
         {
@@ -64,10 +62,9 @@ namespace VocabValley.Core
 
             vocabManager = new VocabManager(Helper, Monitor);
             wordsManager = new WordsManager(Helper, Monitor);
-            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager);
             levelManager = new LevelManager(Helper, Monitor, wordsManager, 30);
             pointsManager = new PointsManager(Helper, Monitor);
-            wrongWordsManager = new WrongWordsManager(Helper, Monitor, wordsManager, pointsManager);
+            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager);
         }
 
@@ -106,7 +103,7 @@ namespace VocabValley.Core
         private bool onWrongWordsPageCall(GameLocation location, string[] args, Farmer player, Point point)
         {
             // 注册错题页事件
-            wrongWordsManager.show();
+            WrongWordsManager wrongWordsManager = new WrongWordsManager(Helper, Monitor, wordsManager, pointsManager);
             return true;
         }
         private void onLevelPageCall(GameLocation location, string[] args, Farmer player, Vector2 tile)
