@@ -59,5 +59,6 @@ namespace VocabValley.Core.Level
         {
             Game1.warpFarmer("BabelTowerRewardLevel", 7, 11, false);
         }
+
     }
 }

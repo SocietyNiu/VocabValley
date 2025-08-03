@@ -53,6 +53,7 @@ namespace VocabValley.UI
             };
 
         }
+        
         private string getHoveredItemExtraItemIndex()
         {
             if (hoveredItem != null && itemPriceAndStock != null && itemPriceAndStock.TryGetValue(hoveredItem, out var value) && value.TradeItem != null)

@@ -39,6 +39,12 @@ namespace VocabValley.Core
         // 设置管理器
         private SettingManager settingManager = null;
 
+        // 地下室管理器
+        private CellarManager cellarManager = null;
+
+        // 积分管理器
+        private PointsManager pointsManager = null;
+
         public CoreManager(IModHelper helper, IMonitor monitor)
         {
             Helper = helper;
@@ -47,21 +53,25 @@ namespace VocabValley.Core
             GameLocation.RegisterTileAction("onLearningPageCall", onLearningPageCall);
             GameLocation.RegisterTileAction("onRewardPageCall", onRewardPageCall);
             GameLocation.RegisterTileAction("onBossPageCall", onBossPageCall);
-            GameLocation.RegisterTouchAction("onLevelPageCall", onLevelPageCall);
             GameLocation.RegisterTileAction("onWrongWordsPageCall", onWrongWordsPageCall);
             GameLocation.RegisterTileAction("onVocabPageCall", onVocabPageCall);
+
+            GameLocation.RegisterTouchAction("onLevelPageCall", onLevelPageCall);
+            GameLocation.RegisterTouchAction("onWarpCellar", onWarpCellar);
 
             vocabManager = new VocabManager(Helper, Monitor);
             wordsManager = new WordsManager(Helper, Monitor);
             savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager);
             levelManager = new LevelManager(Helper, Monitor, wordsManager, 30);
+            pointsManager = new PointsManager(Helper, Monitor);
+            cellarManager = new CellarManager(Helper, Monitor, pointsManager);
         }
 
         private bool onLearningPageCall(GameLocation location, string[] args, Farmer player, Point point)
         {
             // 注册普通层学习事件
             LearningPageManager learningPageManager 
-                    = new LearningPageManager(Helper, Monitor, wordsManager, 10, levelManager);
+                    = new LearningPageManager(Helper, Monitor, wordsManager, 10, levelManager, pointsManager);
             learningPageManager.onLearningPageCall();
             return true;
         }
@@ -99,6 +109,11 @@ namespace VocabValley.Core
         {
             // 注册塔内层级页面事件
             levelManager.onCallNextLevel();
+        }
+
+        private void onWarpCellar(GameLocation location, string[] args, Farmer player, Vector2 tile)
+        {
+            cellarManager.onWarpCellar();
         }
     }
 }

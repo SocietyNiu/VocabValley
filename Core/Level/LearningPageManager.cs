@@ -21,7 +21,7 @@ namespace VocabValley.Core.Level
 
         private readonly WordsManager wordsManager;
         private readonly LevelManager levelManager;
-        // private readonly PointsManager pointsManager;
+        private readonly PointsManager pointsManager;
 
         // 单次学习单词数量
         public int learningWordsCount { get; set; }
@@ -31,14 +31,14 @@ namespace VocabValley.Core.Level
 
         public LearningPageManager(IModHelper helper, IMonitor monitor, 
             WordsManager WordsManager, int LearningWordsCount, 
-            LevelManager levelManager)
+            LevelManager levelManager, PointsManager pointsManager)
         {
             Helper = helper;
             Monitor = monitor;
 
             wordsManager = WordsManager;
             learningWordsCount = LearningWordsCount;
-            // this.pointsManager = pointsManager;
+            this.pointsManager = pointsManager;
             this.levelManager = levelManager;
         }
 
@@ -95,7 +95,7 @@ namespace VocabValley.Core.Level
                 else
                 {
                     // 答对则加分
-                    // pointsManager.changePoints(10000);
+                    pointsManager.changePoints(10000);
                 }
                 
                 updateProgress(quiz, wordPage.lastAnswerCorrect());
