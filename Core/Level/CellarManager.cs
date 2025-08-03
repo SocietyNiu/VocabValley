@@ -53,8 +53,8 @@ namespace VocabValley.Core.Level
                         switch (ans)
                         {
                             case "YES":
-                                unLockCellar()
-;                                break;
+                                unLockCellar();
+                                break;
                             case "NO":
                                 break;
                         }
@@ -74,6 +74,7 @@ namespace VocabValley.Core.Level
                 else
                 {
                     pointsManager.changePoints(-100);
+                    Game1.playSound("money");
                     isLocked = false;
                     Game1.drawObjectDialogue("地下室已解锁");
                 }
