@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Model;
+using VocabValley.Core.Points;
 using VocabValley.UI;
 
 namespace VocabValley.Core.Reward
@@ -15,19 +16,34 @@ namespace VocabValley.Core.Reward
         private readonly IModHelper Helper;
         private readonly IMonitor Monitor;
 
+        private PointsManager pointsManager;
+
         public List<RewardCard> cards;
         public string type = "normal";
-        public RewardManager(IModHelper helper, IMonitor monitor, string type)
+        public int shuffleCost = 1000;
+        public bool isRewarded = false;
+        public RewardManager(IModHelper helper, IMonitor monitor, PointsManager pointsManager)
         {
             Helper = helper;
             Monitor = monitor;
-            this.type = type;
+            this.pointsManager = pointsManager;
 
             cards = new List<RewardCard>();
-            RewardConfig.init(helper);
-            RewardCardBackground.init(helper);
+        }
+        public void init()
+        {
+            RewardConfig.init(Helper);
+            RewardCardBackground.init(Helper);
         }
 
+        public void reset()
+        {
+            // 没有取过
+            isRewarded = false;
+
+            // 重置奖励卡片
+            shuffleAndSetCard();
+        }
         public void setRandomNormalRewardCard()
         {
             Random rng = Game1.random;
@@ -44,21 +60,38 @@ namespace VocabValley.Core.Reward
         public void setCheatRewardCard()
         {
         }
+        public void shuffleAndSetCard()
+        {
+            cards = new List<RewardCard>();
+            setRandomNormalRewardCard();
+        }
 
         public void onRewardPageCall()
         {
-            RewardPage rewardPage = new RewardPage(Helper, Monitor, "normal");
-
-            cards = new List<RewardCard>();
-            setRandomNormalRewardCard();
-
+            if(isRewarded == true)
+            {
+                Game1.drawObjectDialogue("你已选择过奖励");
+                return;
+            }
+            RewardPage rewardPage = new RewardPage(Helper, Monitor, "normal", shuffleCost);
             rewardPage.cards = cards;
 
             rewardPage.RewardChosen += () =>
             {
+                isRewarded = true;
                 Game1.exitActiveMenu();
                 cards[rewardPage.rewardChosen].executeReward?.Invoke();
                 Game1.drawObjectDialogue("你选择了"+ cards[rewardPage.rewardChosen].title);
+            };
+
+            rewardPage.Shuffle += () =>
+            {
+                // TODO: 调整shuffle价格
+                if(pointsManager.changePoints(-shuffleCost))
+                {
+                    shuffleAndSetCard();
+                    rewardPage.cards = cards;
+                }
             };
 
             Game1.activeClickableMenu = rewardPage;

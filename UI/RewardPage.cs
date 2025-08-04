@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using System.Reflection.Emit;
 using xTile;
 using VocabValley.Core.Model;
+using VocabValley.Utils;
 
 namespace VocabValley.UI
 {
@@ -18,8 +19,11 @@ namespace VocabValley.UI
     {
         private readonly IModHelper Helper;
         private readonly IMonitor Monitor;
+        
+        private const string BTTEXTURE = "LooseSprites/VocabValley_Button";
+        private readonly Texture2D btTexture;
 
-        private readonly string cardType = "normal";
+        private readonly string cardType = "normal";        
 
         private const int gap = 30;
         private readonly int cardW = 0;
@@ -27,13 +31,19 @@ namespace VocabValley.UI
 
         // 用于暴露给外层的更新奖励事件
         public event Action? RewardChosen;
+        
+        // 刷新奖励事件
+        public event Action? Shuffle;
+
 
         public List<RewardCard> cards;
 
         public int rewardChosen = -1;
 
+        public ClickableTextureComponent shuffleButton;
+        public int shuffleCost;
 
-        public RewardPage(IModHelper helper, IMonitor monitor, string cardType) :
+        public RewardPage(IModHelper helper, IMonitor monitor, string cardType, int shuffleCost) :
             base(x: (Game1.uiViewport.Width - RewardCardBackground.CARD_RECT[cardType].Width * 3 - gap * 2) / 2,
                  y: (Game1.uiViewport.Height - RewardCardBackground.CARD_RECT[cardType].Height) / 2,
                  width: RewardCardBackground.CARD_RECT[cardType].Width * 3 + gap * 2,
@@ -42,10 +52,23 @@ namespace VocabValley.UI
         {
             this.Helper = helper;
             this.Monitor = monitor;
-
             this.cardType = cardType;
+            this.shuffleCost = shuffleCost;
+
             cardW = RewardCardBackground.CARD_RECT[cardType].Width;
             cardH = RewardCardBackground.CARD_RECT[cardType].Height;
+
+            btTexture = helper.GameContent.Load<Texture2D>(BTTEXTURE);
+
+            shuffleButton = new ClickableTextureComponent(
+                name: "shuffleCards",
+                bounds: new Rectangle((Game1.uiViewport.Width - 240)/2, yPositionOnScreen + height + 20, 240, 120),
+                label: "",
+                hoverText: "",
+                texture: btTexture,
+                sourceRect: new Rectangle(0, 0, 240, 120),
+                scale: 0.8f
+                );
         }
 
         public override void draw(SpriteBatch b)
@@ -59,6 +82,8 @@ namespace VocabValley.UI
                 int index = cards.IndexOf(card);
                 drawCard(b, index, card);
             }
+
+            drawShuffleButton(b);
 
             // 画主体内容
             base.draw(b);
@@ -146,7 +171,28 @@ namespace VocabValley.UI
                 }
             }
 
+            if(shuffleButton.containsPoint(x, y))
+            {
+                Shuffle?.Invoke();
+                Game1.playSound("bigSelect");
+            }
+
             base.receiveLeftClick(x, y, playSound);
+        }
+
+        public void drawShuffleButton(SpriteBatch b)
+        {
+            string text = "刷新(" + this.shuffleCost.ToString() + ")";
+
+            shuffleButton.draw(b);
+
+            b.DrawString(
+                Game1.dialogueFont,
+                text,
+                UIUtils.textCenterAlignedPos(text, new Vector2(shuffleButton.bounds.X, shuffleButton.bounds.Y), new Vector2(shuffleButton.bounds.Width, shuffleButton.bounds.Height), "dialogue", shuffleButton.scale),
+                Color.Black
+                );
+
         }
     }
 

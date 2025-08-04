@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Model;
+using VocabValley.Core.Reward;
 using xTile.Tiles;
 
 namespace VocabValley.Core.Level
@@ -16,16 +17,20 @@ namespace VocabValley.Core.Level
         private readonly IMonitor Monitor;
 
         private WordsManager wordsManager;
+        private RewardManager rewardManager;
 
         // 学习多少单词进入复习环节
         private readonly int thresholdCount = 0;
 
-        public LevelManager(IModHelper helper, IMonitor monitor, WordsManager wordsManager, int thresholdCount)
+        public LevelManager(IModHelper helper, IMonitor monitor, 
+            WordsManager wordsManager, int thresholdCount,
+            RewardManager rewardManager)
         {
             Helper = helper;
             Monitor = monitor;
             this.wordsManager = wordsManager;
             this.thresholdCount = thresholdCount;
+            this.rewardManager = rewardManager;
         }
 
         public void onCallNextLevel()
@@ -57,6 +62,7 @@ namespace VocabValley.Core.Level
         }
         public void onCallRewardLevel()
         {
+            rewardManager.reset();
             Game1.warpFarmer("BabelTowerRewardLevel", 7, 11, false);
         }
 

@@ -45,10 +45,15 @@ namespace VocabValley.Core
         // 积分管理器
         private PointsManager pointsManager = null;
 
+        // 奖励管理器
+        private RewardManager rewardManager = null;
+
         public CoreManager(IModHelper helper, IMonitor monitor)
         {
             Helper = helper;
             Monitor = monitor;
+
+            helper.Events.GameLoop.SaveLoaded += onSaveLoaded;
 
             GameLocation.RegisterTileAction("onLearningPageCall", onLearningPageCall);
             GameLocation.RegisterTileAction("onRewardPageCall", onRewardPageCall);
@@ -56,19 +61,25 @@ namespace VocabValley.Core
             GameLocation.RegisterTileAction("onWrongWordsPageCall", onWrongWordsPageCall);
             GameLocation.RegisterTileAction("onVocabPageCall", onVocabPageCall);
             GameLocation.RegisterTileAction("onSettingPageCall", onSettingPageCall);
-
             GameLocation.RegisterTouchAction("onLevelPageCall", onLevelPageCall);
             GameLocation.RegisterTouchAction("onWarpCellar", onWarpCellar);
             
             vocabManager = new VocabManager(Helper, Monitor);
             wordsManager = new WordsManager(Helper, Monitor);
-            levelManager = new LevelManager(Helper, Monitor, wordsManager, 5);
             pointsManager = new PointsManager(Helper, Monitor);
+            rewardManager = new RewardManager(Helper, Monitor, pointsManager);
+            levelManager = new LevelManager(Helper, Monitor, wordsManager, 5, rewardManager);
             settingManager = new SettingManager(Helper, Monitor);
             savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager, settingManager);
         }
 
+        public void onSaveLoaded(object? s, SaveLoadedEventArgs e)
+        {
+            // 有些材质导入不能再Entry时进行
+            // 放在读取存档时进行
+            rewardManager.init();
+        }
         private bool onLearningPageCall(GameLocation location, string[] args, Farmer player, Point point)
         {
             // 注册普通层学习事件
@@ -81,7 +92,6 @@ namespace VocabValley.Core
         private bool onRewardPageCall(GameLocation location, string[] args, Farmer player, Point point)
         {
             // 注册奖励页面事件
-            RewardManager rewardManager = new RewardManager(Helper, Monitor, "normal");
             rewardManager.onRewardPageCall();
             return true;
         }

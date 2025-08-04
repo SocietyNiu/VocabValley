@@ -57,15 +57,17 @@ namespace VocabValley.Core.Points
             sb.DrawString(Game1.smallFont, points.ToString(), new Vector2(48, 16), Color.White);
         }
 
-        public void changePoints(int amount)
+        public bool changePoints(int amount)
         {
             if(this.points + amount < 0)
             {
-                throw new Exception("知识碎片不可为负");
+                Game1.drawObjectDialogue("你没有足够的知识碎片。");
+                return false;
             }
             this.points += amount;
+            return true;
         }
 
-
+        
     }
 }
