@@ -20,7 +20,7 @@ namespace VocabValley.Core.Reward
 
         public List<RewardCard> cards;
         public string type = "normal";
-        public int shuffleCost = 1000;
+        public int shuffleCost = 50;
         public bool isRewarded = false;
         public RewardManager(IModHelper helper, IMonitor monitor, PointsManager pointsManager)
         {

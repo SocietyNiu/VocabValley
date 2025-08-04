@@ -101,5 +101,66 @@ namespace VocabValley.Core.Reward
             return;
         }
 
+        public static void grandPoints(int amount)
+        {
+            if (!Context.IsWorldReady)
+                return;
+        }
+
+        public static void grandRandomDiamond(int amount)
+        {
+            if (!Context.IsWorldReady)
+                return;
+            Random rng = new(Guid.NewGuid().GetHashCode());
+            string itemId = RewardConfig.Diamonds[rng.Next(RewardConfig.Diamonds.Length)];
+            var item = new StardewValley.Object(itemId, amount);
+            if (!Game1.player.addItemToInventoryBool(item, true))
+                Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+        }
+
+        public static void grandDishes(int amount)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            Random rng = new(Guid.NewGuid().GetHashCode());
+            string itemId = RewardConfig.Dishes[rng.Next(RewardConfig.Dishes.Length)];
+            var item = new StardewValley.Object(itemId, amount);
+            if (!Game1.player.addItemToInventoryBool(item, true))
+                Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+        }
+
+        public static void grantShard(int amount, float ratio)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            Random rng = new(Guid.NewGuid().GetHashCode());
+            if(rng.NextDouble() < ratio)
+            {
+                var item = new StardewValley.Object("74", amount);
+                if (!Game1.player.addItemToInventoryBool(item, true))
+                    Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+                Game1.showGlobalMessage("你幸运地获得了一块五彩碎片！");
+            }
+            else
+            {
+                Game1.showGlobalMessage("什么也没有发生……");
+            }
+        }
+
+        public static void grandMedicine()
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            var item = new StardewValley.Object("349", 1);
+            if (!Game1.player.addItemToInventoryBool(item, true))
+                Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+
+            item = new StardewValley.Object("351", 1);
+            if (!Game1.player.addItemToInventoryBool(item, true))
+                Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+        }
     }
 }
