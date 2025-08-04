@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VocabValley.Core.Points;
+using VocabValley.UI;
 
 namespace VocabValley.Core.Setting
 {
@@ -23,7 +25,12 @@ namespace VocabValley.Core.Setting
 
             helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
         }
+        public void onPageCall()
+        {
+            SettingPage settingPage = new SettingPage(Helper, Monitor, this);
+            Game1.activeClickableMenu = settingPage;
 
+        }
         public void setPause(bool isPause)
         {
             if (!Context.IsWorldReady) return;

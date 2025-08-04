@@ -11,5 +11,7 @@ namespace VocabValley.Core.Setting
         public bool isPause = false;
         public bool isWrongWordsPageLocked = true;
         public bool isCellarLocked = true;
+        public bool isSettingPageLocked = true;
+        public bool isStatisticsLocked = true;
     }
 }

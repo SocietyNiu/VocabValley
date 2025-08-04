@@ -101,8 +101,15 @@ namespace VocabValley.Core.Level
                 {
                     // 关闭UI
                     Game1.exitActiveMenu();
-
-                    Game1.drawObjectDialogue("单词守护者已被击倒！");
+                    if(wrongCount != 0)
+                    {
+                        Game1.drawObjectDialogue("你有"+wrongCount.ToString()+"个单词回答错误。"+"单词守护者将会带着这些词卷土重来！");
+                    }
+                    else
+                    {
+                        Game1.drawObjectDialogue("干得漂亮，单词回答全部正确。单词守护者已被击倒！");
+                    }
+                        
 
                     // 传送到楼梯层
                     levelManager.onCallRewardLevel();

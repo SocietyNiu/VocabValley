@@ -55,13 +55,14 @@ namespace VocabValley.Core
             GameLocation.RegisterTileAction("onBossPageCall", onBossPageCall);
             GameLocation.RegisterTileAction("onWrongWordsPageCall", onWrongWordsPageCall);
             GameLocation.RegisterTileAction("onVocabPageCall", onVocabPageCall);
+            GameLocation.RegisterTileAction("onSettingPageCall", onSettingPageCall);
 
             GameLocation.RegisterTouchAction("onLevelPageCall", onLevelPageCall);
             GameLocation.RegisterTouchAction("onWarpCellar", onWarpCellar);
-
+            
             vocabManager = new VocabManager(Helper, Monitor);
             wordsManager = new WordsManager(Helper, Monitor);
-            levelManager = new LevelManager(Helper, Monitor, wordsManager, 30);
+            levelManager = new LevelManager(Helper, Monitor, wordsManager, 5);
             pointsManager = new PointsManager(Helper, Monitor);
             settingManager = new SettingManager(Helper, Monitor);
             savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager);
@@ -72,7 +73,7 @@ namespace VocabValley.Core
         {
             // 注册普通层学习事件
             LearningPageManager learningPageManager 
-                    = new LearningPageManager(Helper, Monitor, wordsManager, 10, levelManager, pointsManager);
+                    = new LearningPageManager(Helper, Monitor, wordsManager, 5, levelManager, pointsManager);
             learningPageManager.onLearningPageCall();
             return true;
         }
@@ -106,6 +107,13 @@ namespace VocabValley.Core
             WrongWordsManager wrongWordsManager = new WrongWordsManager(Helper, Monitor, wordsManager, pointsManager, settingManager);
             return true;
         }
+        
+        private bool onSettingPageCall(GameLocation location, string[] args, Farmer player, Point point)
+        {
+            settingManager.onPageCall();
+            return true;
+        }
+
         private void onLevelPageCall(GameLocation location, string[] args, Farmer player, Vector2 tile)
         {
             // 注册塔内层级页面事件
