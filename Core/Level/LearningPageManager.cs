@@ -10,6 +10,7 @@ using VocabValley.UI;
 using VocabValley.Utils;
 using VocabValley.Core.Points;
 using VocabValley.Core.Model;
+using VocabValley.Core.Statistics;
 
 namespace VocabValley.Core.Level
 {
@@ -22,7 +23,7 @@ namespace VocabValley.Core.Level
         private readonly WordsManager wordsManager;
         private readonly LevelManager levelManager;
         private readonly PointsManager pointsManager;
-
+        private readonly StatisticsManager statisticsManager;
         // 单次学习单词数量
         public int learningWordsCount { get; set; }
 
@@ -31,7 +32,8 @@ namespace VocabValley.Core.Level
 
         public LearningPageManager(IModHelper helper, IMonitor monitor, 
             WordsManager WordsManager, int LearningWordsCount, 
-            LevelManager levelManager, PointsManager pointsManager)
+            LevelManager levelManager, PointsManager pointsManager,
+            StatisticsManager statisticsManager)
         {
             Helper = helper;
             Monitor = monitor;
@@ -40,6 +42,7 @@ namespace VocabValley.Core.Level
             learningWordsCount = LearningWordsCount;
             this.pointsManager = pointsManager;
             this.levelManager = levelManager;
+            this.statisticsManager = statisticsManager;
         }
 
         // 准备所学单词
@@ -107,6 +110,7 @@ namespace VocabValley.Core.Level
 
                     Game1.drawObjectDialogue("单词石碑已经摧毁！");
 
+                    statisticsManager.statisticsState.normalLevelCount++;
                     // 传送到楼梯层
                     levelManager.onCallStairLevel();
 

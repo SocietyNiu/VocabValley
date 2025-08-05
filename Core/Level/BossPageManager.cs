@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Model;
+using VocabValley.Core.Statistics;
 using VocabValley.UI;
 using VocabValley.Utils;
 
@@ -23,7 +24,7 @@ namespace VocabValley.Core.Level
         private readonly IMonitor Monitor;
         private readonly WordsManager wordsManager;
         private readonly LevelManager levelManager;
-
+        private readonly StatisticsManager statisticsManager;
 
         // 答错不重新学习，直接结束
         private Queue<Word> wordQuizzesQueue;
@@ -33,12 +34,13 @@ namespace VocabValley.Core.Level
 
         public BossPageManager(IModHelper helper, IMonitor monitor,
             WordsManager wordsManager,
-            int countDown, LevelManager levelManager)
+            int countDown, LevelManager levelManager, StatisticsManager statisticsManager)
         {
             Helper = helper;
             Monitor = monitor;
             this.wordsManager = wordsManager;
             this.levelManager = levelManager;
+            this.statisticsManager = statisticsManager;
 
             wrongCount = 0;
 
@@ -109,7 +111,8 @@ namespace VocabValley.Core.Level
                     {
                         Game1.drawObjectDialogue("干得漂亮，单词回答全部正确。单词守护者已被击倒！");
                     }
-                        
+
+                    statisticsManager.statisticsState.BossLevelCount++;
 
                     // 传送到楼梯层
                     levelManager.onCallRewardLevel();

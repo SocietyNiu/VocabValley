@@ -26,6 +26,17 @@ namespace VocabValley
         public override void Entry(IModHelper helper)
         {
             coreManager = new CoreManager(helper, Monitor);
+            // helper.Events.Input.ButtonPressed += onButtonPressed;
         }
+
+        /*
+        public void onButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            if (e.Button == SButton.L)
+            {
+                
+            }
+        }
+        */
     }
 }

@@ -22,8 +22,6 @@ namespace VocabValley.Core.Setting
         {
             Helper = helper;
             Monitor = monitor;
-
-            helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
         }
         public void onPageCall()
         {
@@ -34,7 +32,7 @@ namespace VocabValley.Core.Setting
         public void setPause(bool isPause)
         {
             if (!Context.IsWorldReady) return;
-
+    
             settingState.isPause = isPause;
         }
 
@@ -44,5 +42,24 @@ namespace VocabValley.Core.Setting
             if (settingState!=null && settingState.isPause)
                 Game1.gameTimeInterval = 0;
         }
+
+        private void onMenuChanged(object? sender, MenuChangedEventArgs e) 
+        { 
+            if(settingState is null ||  !settingState.isPause)
+            {
+                return;
+            }
+
+            // 如果是学习页面则停止计时
+            if(e.NewMenu is WordLearningPage || e.NewMenu is BossPage)
+            {
+                Helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
+            } else if(e.OldMenu is WordLearningPage || e.OldMenu is BossPage)
+            {
+                Helper.Events.GameLoop.UpdateTicked -= OnUpdateTicked;
+            }
+        }
+
+
     }
 }

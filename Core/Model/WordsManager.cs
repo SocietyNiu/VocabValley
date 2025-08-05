@@ -110,5 +110,15 @@ namespace VocabValley.Core.Model
                    .Where(word => word.reviewCount == 0 && word.isLearned )
                    .ToList();
         }
+
+        public string getProgress()
+        {
+            var totalCount = wordsList.Count;
+            var learnedCount = wordsList
+                               .Where(word => word.isLearned)
+                               .ToList()
+                               .Count();
+            return learnedCount.ToString() + "/" + totalCount.ToString();
+        }
     }
 }

@@ -21,5 +21,12 @@ namespace VocabValley.Utils
                 _ => -1
             };
         }
+
+        public static string Time2String(double totalSeconds)
+        {
+            TimeSpan ts = TimeSpan.FromSeconds(totalSeconds); // ① 转成 TimeSpan
+            string text = ts.ToString(@"hh\:mm\:ss");
+            return text;
+        }
     }
 }

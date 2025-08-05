@@ -65,4 +65,11 @@ namespace VocabValley.Core.Model
             this.executeReward = executeReward;
         }
     }
+
+    public record StatisticsState
+    {
+        public double totalSeconds = 0;
+        public int normalLevelCount = 0;
+        public int BossLevelCount = 0;
+    }
 }

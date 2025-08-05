@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Model;
 using VocabValley.Core.Reward;
+using VocabValley.Core.Statistics;
 using xTile.Tiles;
 
 namespace VocabValley.Core.Level

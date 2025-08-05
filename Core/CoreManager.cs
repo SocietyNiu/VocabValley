@@ -48,6 +48,9 @@ namespace VocabValley.Core
         // 奖励管理器
         private RewardManager rewardManager = null;
 
+        // 统计数据管理器
+        private StatisticsManager statisticsManager = null;
+
         public CoreManager(IModHelper helper, IMonitor monitor)
         {
             Helper = helper;
@@ -61,6 +64,7 @@ namespace VocabValley.Core
             GameLocation.RegisterTileAction("onWrongWordsPageCall", onWrongWordsPageCall);
             GameLocation.RegisterTileAction("onVocabPageCall", onVocabPageCall);
             GameLocation.RegisterTileAction("onSettingPageCall", onSettingPageCall);
+            GameLocation.RegisterTileAction("onStatisticsPageCall", onStatisticsPageCall);
             GameLocation.RegisterTouchAction("onLevelPageCall", onLevelPageCall);
             GameLocation.RegisterTouchAction("onWarpCellar", onWarpCellar);
             
@@ -70,8 +74,10 @@ namespace VocabValley.Core
             rewardManager = new RewardManager(Helper, Monitor, pointsManager);
             levelManager = new LevelManager(Helper, Monitor, wordsManager, 5, rewardManager);
             settingManager = new SettingManager(Helper, Monitor);
-            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager);
+            statisticsManager = new StatisticsManager(Helper, Monitor, wordsManager);
+            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager, settingManager);
+            
         }
 
         public void onSaveLoaded(object? s, SaveLoadedEventArgs e)
@@ -84,7 +90,7 @@ namespace VocabValley.Core
         {
             // 注册普通层学习事件
             LearningPageManager learningPageManager 
-                    = new LearningPageManager(Helper, Monitor, wordsManager, 5, levelManager, pointsManager);
+                    = new LearningPageManager(Helper, Monitor, wordsManager, 5, levelManager, pointsManager, statisticsManager);
             learningPageManager.onLearningPageCall();
             return true;
         }
@@ -100,7 +106,7 @@ namespace VocabValley.Core
         {
             // 注册Boss页面事件
             BossPageManager bossPageManager 
-                = new BossPageManager(Helper, Monitor, wordsManager, 0, levelManager);
+                = new BossPageManager(Helper, Monitor, wordsManager, 0, levelManager, statisticsManager);
             bossPageManager.onBossPageCall();
             return true;
         }
@@ -124,6 +130,12 @@ namespace VocabValley.Core
             return true;
         }
 
+        private bool onStatisticsPageCall(GameLocation location, string[] args, Farmer player, Point point)
+        {
+            statisticsManager.onShowPageCall();
+            return true;
+        }
+
         private void onLevelPageCall(GameLocation location, string[] args, Farmer player, Vector2 tile)
         {
             // 注册塔内层级页面事件
@@ -134,5 +146,7 @@ namespace VocabValley.Core
         {
             cellarManager.onWarpCellar();
         }
+
+        
     }
 }

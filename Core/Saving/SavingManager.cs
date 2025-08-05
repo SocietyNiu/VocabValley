@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VocabValley.Core.Model;
 using VocabValley.Core.Points;
 using VocabValley.Core.Setting;
+using VocabValley.Core.Statistics;
 
 namespace VocabValley.Core.Saving
 {
@@ -21,6 +22,7 @@ namespace VocabValley.Core.Saving
         private VocabManager vocabManager;
         private PointsManager pointsManager;
         private SettingManager settingManager;
+        private StatisticsManager statisticsManager;
 
         private Dictionary<int, SaveState> _progress = null!;
         private Config _config;
@@ -30,7 +32,8 @@ namespace VocabValley.Core.Saving
 
         public SavingManager(IModHelper helper, IMonitor monitor,
             VocabManager vocabManager, WordsManager wordsManager,
-            PointsManager pointsManager, SettingManager settingManager)
+            PointsManager pointsManager, SettingManager settingManager,
+            StatisticsManager statisticsManager)
         {
             Helper = helper;
             Monitor = monitor;
@@ -46,6 +49,7 @@ namespace VocabValley.Core.Saving
                 updateProgress(fileName);
             };
             this.settingManager = settingManager;
+            this.statisticsManager = statisticsManager;
         }
 
 
@@ -93,7 +97,8 @@ namespace VocabValley.Core.Saving
 
             _otherState = Helper.Data.ReadSaveData<OtherState>("otherState") ?? new OtherState();
             pointsManager.points = _otherState.Points;
-            settingManager.settingState = _otherState.SettingState;
+            settingManager.settingState = _config.SettingState;
+            statisticsManager.statisticsState = _otherState.StatisticsState;
         }
 
         public void onSaving(object? s, SavingEventArgs e)
@@ -109,13 +114,14 @@ namespace VocabValley.Core.Saving
             }
 
             _config.fileName = vocabManager.vocabChosen;
+            _config.SettingState = settingManager.settingState;
             Helper.Data.WriteSaveData("config", _config);
 
             _allProgress[_config.fileName] = _progress;
             Helper.Data.WriteSaveData("allProgress", _allProgress);
 
             _otherState.Points = pointsManager.points;
-            _otherState.SettingState = settingManager.settingState;
+            _otherState.StatisticsState = statisticsManager.statisticsState;
             Helper.Data.WriteSaveData("otherState", _otherState);
 
         }
