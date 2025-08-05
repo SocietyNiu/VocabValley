@@ -98,7 +98,7 @@ namespace VocabValley.Core.Level
                 else
                 {
                     // 答对则加分
-                    pointsManager.changePoints(10000);
+                    pointsManager.changePoints(1);
                 }
                 
                 updateProgress(quiz, wordPage.lastAnswerCorrect());

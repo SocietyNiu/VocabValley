@@ -72,7 +72,7 @@ namespace VocabValley.Core
             wordsManager = new WordsManager(Helper, Monitor);
             pointsManager = new PointsManager(Helper, Monitor);
             rewardManager = new RewardManager(Helper, Monitor, pointsManager);
-            levelManager = new LevelManager(Helper, Monitor, wordsManager, 5, rewardManager);
+            levelManager = new LevelManager(Helper, Monitor, wordsManager, 30, rewardManager);
             settingManager = new SettingManager(Helper, Monitor);
             statisticsManager = new StatisticsManager(Helper, Monitor, wordsManager);
             savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager);
@@ -90,7 +90,7 @@ namespace VocabValley.Core
         {
             // 注册普通层学习事件
             LearningPageManager learningPageManager 
-                    = new LearningPageManager(Helper, Monitor, wordsManager, 5, levelManager, pointsManager, statisticsManager);
+                    = new LearningPageManager(Helper, Monitor, wordsManager, 10, levelManager, pointsManager, statisticsManager);
             learningPageManager.onLearningPageCall();
             return true;
         }
