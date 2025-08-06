@@ -66,6 +66,7 @@ namespace VocabValley.Core
             GameLocation.RegisterTileAction("onVocabPageCall", onVocabPageCall);
             GameLocation.RegisterTileAction("onSettingPageCall", onSettingPageCall);
             GameLocation.RegisterTileAction("onStatisticsPageCall", onStatisticsPageCall);
+            GameLocation.RegisterTileAction("onRewardPremium", onRewardPremium);
             GameLocation.RegisterTouchAction("onLevelPageCall", onLevelPageCall);
             GameLocation.RegisterTouchAction("onWarpCellar", onWarpCellar);
             
@@ -76,7 +77,7 @@ namespace VocabValley.Core
             rewardManager = new RewardManager(Helper, Monitor, pointsManager);
             levelManager = new LevelManager(Helper, Monitor, wordsManager, 30, rewardManager, settingManager);
             statisticsManager = new StatisticsManager(Helper, Monitor, wordsManager);
-            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager);
+            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager, rewardManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager, settingManager);
             
         }
@@ -134,6 +135,12 @@ namespace VocabValley.Core
         private bool onStatisticsPageCall(GameLocation location, string[] args, Farmer player, Point point)
         {
             statisticsManager.onShowPageCall();
+            return true;
+        }
+
+        private bool onRewardPremium(GameLocation location, string[] args, Farmer player, Point point)
+        {
+            rewardManager.updatePremiumLevel();
             return true;
         }
 

@@ -149,16 +149,16 @@ namespace VocabValley.Core.Reward
             }
         }
 
-        public static void grandMedicine()
+        public static void grandMedicine(int amount)
         {
             if (!Context.IsWorldReady)
                 return;
 
-            var item = new StardewValley.Object("349", 1);
+            var item = new StardewValley.Object("349", amount);
             if (!Game1.player.addItemToInventoryBool(item, true))
                 Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
 
-            item = new StardewValley.Object("351", 1);
+            item = new StardewValley.Object("351", amount);
             if (!Game1.player.addItemToInventoryBool(item, true))
                 Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
         }

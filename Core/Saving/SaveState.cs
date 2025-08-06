@@ -23,7 +23,7 @@ namespace VocabValley.Core.Saving
     public record OtherState
     {
         public int Points { get; set; } = new int();
-        
         public StatisticsState StatisticsState { get; set; } = new StatisticsState();
+        public int PremiumLevel { get; set; } = 1;
     }
 }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VocabValley.Core.Model;
 using VocabValley.Core.Points;
+using VocabValley.Core.Reward;
 using VocabValley.Core.Setting;
 using VocabValley.Core.Statistics;
 
@@ -23,6 +24,7 @@ namespace VocabValley.Core.Saving
         private PointsManager pointsManager;
         private SettingManager settingManager;
         private StatisticsManager statisticsManager;
+        private RewardManager rewardManager;
 
         private Dictionary<int, SaveState> _progress = null!;
         private Config _config;
@@ -33,7 +35,7 @@ namespace VocabValley.Core.Saving
         public SavingManager(IModHelper helper, IMonitor monitor,
             VocabManager vocabManager, WordsManager wordsManager,
             PointsManager pointsManager, SettingManager settingManager,
-            StatisticsManager statisticsManager)
+            StatisticsManager statisticsManager, RewardManager rewardManager)
         {
             Helper = helper;
             Monitor = monitor;
@@ -44,12 +46,15 @@ namespace VocabValley.Core.Saving
             this.wordsManager = wordsManager;
             this.vocabManager = vocabManager;
             this.pointsManager = pointsManager;
+            this.rewardManager = rewardManager;
+            this.settingManager = settingManager;
+            this.statisticsManager = statisticsManager;
+
             this.vocabManager.OnVocabChanged += (string fileName) =>
             {
                 updateProgress(fileName);
             };
-            this.settingManager = settingManager;
-            this.statisticsManager = statisticsManager;
+            
         }
 
 
@@ -99,6 +104,8 @@ namespace VocabValley.Core.Saving
             pointsManager.points = _otherState.Points;
             settingManager.settingState = _config.SettingState;
             statisticsManager.statisticsState = _otherState.StatisticsState;
+            rewardManager.premiumLevel = _otherState.PremiumLevel;
+            rewardManager.updateNormalReward();
         }
 
         public void onSaving(object? s, SavingEventArgs e)
@@ -122,6 +129,7 @@ namespace VocabValley.Core.Saving
 
             _otherState.Points = pointsManager.points;
             _otherState.StatisticsState = statisticsManager.statisticsState;
+            _otherState.PremiumLevel = rewardManager.premiumLevel;
             Helper.Data.WriteSaveData("otherState", _otherState);
 
         }

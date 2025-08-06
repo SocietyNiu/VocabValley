@@ -22,6 +22,11 @@ namespace VocabValley.Core.Reward
         public string type = "normal";
         public int shuffleCost = 50;
         public bool isRewarded = false;
+
+        public int premiumLevel = 1;
+        private int premiumPrice = 200;
+
+
         public RewardManager(IModHelper helper, IMonitor monitor, PointsManager pointsManager)
         {
             Helper = helper;
@@ -95,6 +100,52 @@ namespace VocabValley.Core.Reward
             };
 
             Game1.activeClickableMenu = rewardPage;
+        }
+
+        public void updateNormalReward()
+        {
+            RewardConfig.updateNormalCard(premiumLevel, Helper);
+        }
+
+        public void updatePremiumLevel()
+        {
+            if (premiumLevel >= 5)
+            {
+                Game1.drawObjectDialogue("您已达到最高等级");
+                return;
+            }
+
+            if(pointsManager.points < premiumPrice)
+            {
+                Game1.drawObjectDialogue($"升级需要{premiumPrice}知识碎片");
+                return;
+            } else
+            {
+                string Question = $"你想用{premiumPrice}知识碎片升级吗?";
+                Response[] opts = {
+                    new("YES", "是的"),
+                    new("NO",  "我再想想")
+                };
+                Game1.currentLocation.createQuestionDialogue(
+                    Question,
+                    opts,
+                    (farmer, ans) =>
+                    {
+                        switch (ans)
+                        {
+                            case "YES":
+                                if (pointsManager.changePoints(-premiumPrice))
+                                {
+                                    premiumLevel++;
+                                    updateNormalReward();
+                                    Game1.drawObjectDialogue($"升级成功，你现在的等级为：{premiumLevel}");
+                                }
+                                break;
+                            case "NO":
+                                break;
+                        }
+                    });
+            }
         }
     }
 }
