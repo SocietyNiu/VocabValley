@@ -98,7 +98,6 @@ namespace VocabValley.Core.Saving
                 }
             }
 
-            // TODO: 清理词库已删除的词 
 
             _otherState = Helper.Data.ReadSaveData<OtherState>("otherState") ?? new OtherState();
             pointsManager.points = _otherState.Points;

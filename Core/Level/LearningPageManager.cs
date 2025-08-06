@@ -131,20 +131,6 @@ namespace VocabValley.Core.Level
                 word.wrongCount++;
             word.isLearned = true;
         }
-        /*
-        public void updateProgress(List<WordQuiz> wordQuizList)
-        {
-            // TODO: 这里逻辑是学完“一组”单词统一更新进度
-            // 考虑是否要学一个更新一个
-
-            foreach (WordQuiz wordQuiz in wordQuizList)
-            {
-                wordsManager.progress.wordsState[wordQuiz.quizText].isLearned = true;
-                wordsManager.progress.wordsLearnedCount ++;
-                wordsManager.progress.wordsUnlearnedIndex++;
-            }
-        }
-        */
 
 
     }
