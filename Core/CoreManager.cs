@@ -57,6 +57,7 @@ namespace VocabValley.Core
             Monitor = monitor;
 
             helper.Events.GameLoop.SaveLoaded += onSaveLoaded;
+            helper.Events.GameLoop.DayStarted += onDayStarted;
 
             GameLocation.RegisterTileAction("onLearningPageCall", onLearningPageCall);
             GameLocation.RegisterTileAction("onRewardPageCall", onRewardPageCall);
@@ -71,9 +72,9 @@ namespace VocabValley.Core
             vocabManager = new VocabManager(Helper, Monitor);
             wordsManager = new WordsManager(Helper, Monitor);
             pointsManager = new PointsManager(Helper, Monitor);
-            rewardManager = new RewardManager(Helper, Monitor, pointsManager);
-            levelManager = new LevelManager(Helper, Monitor, wordsManager, 30, rewardManager);
             settingManager = new SettingManager(Helper, Monitor);
+            rewardManager = new RewardManager(Helper, Monitor, pointsManager);
+            levelManager = new LevelManager(Helper, Monitor, wordsManager, 30, rewardManager, settingManager);
             statisticsManager = new StatisticsManager(Helper, Monitor, wordsManager);
             savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager, settingManager);
@@ -90,7 +91,7 @@ namespace VocabValley.Core
         {
             // 注册普通层学习事件
             LearningPageManager learningPageManager 
-                    = new LearningPageManager(Helper, Monitor, wordsManager, 10, levelManager, pointsManager, statisticsManager);
+                    = new LearningPageManager(Helper, Monitor, wordsManager, 1, levelManager, pointsManager, statisticsManager);
             learningPageManager.onLearningPageCall();
             return true;
         }
@@ -147,6 +148,12 @@ namespace VocabValley.Core
             cellarManager.onWarpCellar();
         }
 
-        
+        private void onDayStarted(object? sender, DayStartedEventArgs e)
+        {
+            if (settingManager.settingState.dailyLimitation)
+            {
+                settingManager.DailyLimit = 5;
+            }
+        }
     }
 }

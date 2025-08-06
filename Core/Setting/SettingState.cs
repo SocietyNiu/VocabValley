@@ -13,5 +13,6 @@ namespace VocabValley.Core.Setting
         public bool isCellarLocked = true;
         public bool isSettingPageLocked = true;
         public bool isStatisticsLocked = true;
+        public bool dailyLimitation = true;
     }
 }

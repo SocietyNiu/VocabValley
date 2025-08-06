@@ -63,8 +63,17 @@ namespace VocabValley.UI
                     )
 
                 );
+            boxes.Add(
+                new OptionsCheckbox(
+                    "防沉迷设置",
+                    877,
+                    xPositionOnScreen + 150,
+                    yPositionOnScreen + 250
+                    )
 
+                );
             boxes[0].isChecked = settingManager.settingState.isPause;
+            boxes[1].isChecked = settingManager.settingState.dailyLimitation;
         }
 
         public override void draw(SpriteBatch b)
@@ -91,6 +100,13 @@ namespace VocabValley.UI
                 Game1.dialogueFont,
                 "（学习页面已默认时间暂停，该设置表示塔内其他时间）",
                 new Vector2(xPositionOnScreen + 90, yPositionOnScreen + 200),
+                Color.Black
+                );
+
+            b.DrawString(
+                Game1.dialogueFont,
+                "开启防沉迷后，每个游戏日只能爬至多五个楼层。",
+                new Vector2(xPositionOnScreen + 100, yPositionOnScreen + 300),
                 Color.Black
                 );
             // 画选项复选框
@@ -142,6 +158,7 @@ namespace VocabValley.UI
         private void saveSetting()
         {
             settingManager.settingState.isPause = boxes[0].isChecked;
+            settingManager.settingState.dailyLimitation = boxes[1].isChecked;
         }
     }
 }

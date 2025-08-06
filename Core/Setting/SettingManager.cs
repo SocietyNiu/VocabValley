@@ -18,6 +18,7 @@ namespace VocabValley.Core.Setting
         private readonly IMonitor Monitor;
 
         public SettingState settingState;
+        public int DailyLimit = 5;
 
         public SettingManager(IModHelper helper, IMonitor monitor)
         {
