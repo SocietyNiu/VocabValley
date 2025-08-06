@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Xna.Framework;
 using System.Runtime.CompilerServices;
+using VocabValley.Config;
 
 namespace VocabValley.Core.Points
 {
@@ -18,15 +19,6 @@ namespace VocabValley.Core.Points
         private readonly IMonitor Monitor;
 
         public int points;
-
-        private readonly HashSet<string> _allowedMaps = new()
-        {
-            "BabelTower",
-            "BabelTowerNormalLevel",
-            "BabelTowerStairLevel",
-            "BabelTowerRewardLevel",
-            "BabelTowerBossLevel"
-        };
 
         public PointsManager(IModHelper helper, IMonitor monitor)
         {
@@ -41,7 +33,7 @@ namespace VocabValley.Core.Points
             if (!Context.IsWorldReady || Game1.eventUp)
                 return;
 
-            if (!_allowedMaps.Contains(Game1.currentLocation.Name))
+            if (!ConstantConfig.TowerMaps.Contains(Game1.currentLocation.Name))
                 return;
             SpriteBatch sb = e.SpriteBatch;
 

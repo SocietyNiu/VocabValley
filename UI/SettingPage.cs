@@ -56,7 +56,7 @@ namespace VocabValley.UI
 
             boxes.Add(
                 new OptionsCheckbox(
-                    "答题时暂停游戏时间",
+                    "暂停塔内时间",
                     877,
                     xPositionOnScreen + 150,
                     yPositionOnScreen + 150
@@ -87,6 +87,12 @@ namespace VocabValley.UI
                 new Vector2(800, 100)),
                 Color.Black);
 
+            b.DrawString(
+                Game1.dialogueFont,
+                "（学习页面已默认时间暂停，该设置表示塔内其他时间）",
+                new Vector2(xPositionOnScreen + 90, yPositionOnScreen + 200),
+                Color.Black
+                );
             // 画选项复选框
             foreach (var elem in boxes)
             {

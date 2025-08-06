@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VocabValley.Config;
 using VocabValley.Core.Points;
 using VocabValley.UI;
 
@@ -22,6 +23,8 @@ namespace VocabValley.Core.Setting
         {
             Helper = helper;
             Monitor = monitor;
+
+            helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
         }
         public void onPageCall()
         {
@@ -38,28 +41,16 @@ namespace VocabValley.Core.Setting
 
         private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
-            // 每帧把计时清零，永远无法到达下一个时间
+            if (!Context.IsWorldReady) return;
+
             if (settingState!=null && settingState.isPause)
-                Game1.gameTimeInterval = 0;
+                if(ConstantConfig.TowerMaps.Contains(Game1.currentLocation?.NameOrUniqueName ?? ""))
+                {
+                    // 如果在塔内 暂停时间
+                    Game1.gameTimeInterval = 0;
+                }
+                
         }
-
-        private void onMenuChanged(object? sender, MenuChangedEventArgs e) 
-        { 
-            if(settingState is null ||  !settingState.isPause)
-            {
-                return;
-            }
-
-            // 如果是学习页面则停止计时
-            if(e.NewMenu is WordLearningPage || e.NewMenu is BossPage)
-            {
-                Helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
-            } else if(e.OldMenu is WordLearningPage || e.OldMenu is BossPage)
-            {
-                Helper.Events.GameLoop.UpdateTicked -= OnUpdateTicked;
-            }
-        }
-
 
     }
 }
