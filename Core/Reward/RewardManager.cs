@@ -49,6 +49,7 @@ namespace VocabValley.Core.Reward
             Random rng = Game1.random;
 
             cards = RewardConfig.NormalCards
+                .Except(cards)
                 .OrderBy(_ => rng.Next())
                 .Take(3)
                 .ToList();
@@ -62,7 +63,6 @@ namespace VocabValley.Core.Reward
         }
         public void shuffleAndSetCard()
         {
-            cards = new List<RewardCard>();
             setRandomNormalRewardCard();
         }
 
