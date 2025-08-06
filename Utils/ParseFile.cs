@@ -2,6 +2,7 @@
 using StardewValley.Locations;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,11 +53,23 @@ namespace VocabValley.Utils
                     {
                         ID = idx,
                         text = parts[0].Trim(),
-                        translation = parts[1].Trim(),
+                        translation = this.cutString(parts[1].Trim()),
                         isLearned = false,
                         reviewCount = 0
                     })
                     .ToList();
+        }
+
+        public string cutString(string text, int maxElements = 20)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+
+            var strInfo = new StringInfo(text);
+            int elementCount = strInfo.LengthInTextElements;
+
+            if (elementCount <= maxElements) return text;
+
+            return strInfo.SubstringByTextElements(0, maxElements) + "...";
         }
 
     }

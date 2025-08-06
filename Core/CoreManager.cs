@@ -91,7 +91,7 @@ namespace VocabValley.Core
         {
             // 注册普通层学习事件
             LearningPageManager learningPageManager 
-                    = new LearningPageManager(Helper, Monitor, wordsManager, 1, levelManager, pointsManager, statisticsManager);
+                    = new LearningPageManager(Helper, Monitor, wordsManager, 10, levelManager, pointsManager, statisticsManager);
             learningPageManager.onLearningPageCall();
             return true;
         }
