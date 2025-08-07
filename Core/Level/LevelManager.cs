@@ -57,13 +57,7 @@ namespace VocabValley.Core.Level
 
             if (finalProgress.IsEnd)
             {
-                if (!finalProgress.IsReward)
-                {
-                    // 如果词库学习完毕但是奖励还没领取，则进入奖励页面
-                    onCallFinalRewardLevel();
-                    return;
-                }
-                // 如果词库已经学习完毕奖励也领取了，则不允许进入
+                // 如果词库已经学习，则不允许进入
                 Game1.drawObjectDialogue("该词库已学习完成，请换一本吧。");
                 return;
             }
@@ -111,6 +105,8 @@ namespace VocabValley.Core.Level
         }
         public void onCallFinalRewardLevel()
         {
+            rewardManager.reset();
+            rewardManager.setGrandRewardCard();
             Game1.warpFarmer("BabelTowerTop", 20, 29, false);
         }
 

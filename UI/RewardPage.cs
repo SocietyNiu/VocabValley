@@ -83,7 +83,8 @@ namespace VocabValley.UI
                 drawCard(b, index, card);
             }
 
-            drawShuffleButton(b);
+            if(cardType == "normal")
+                drawShuffleButton(b);
 
             // 画主体内容
             base.draw(b);
@@ -171,7 +172,7 @@ namespace VocabValley.UI
                 }
             }
 
-            if(shuffleButton.containsPoint(x, y))
+            if(shuffleButton.containsPoint(x, y) && cardType =="normal")
             {
                 Shuffle?.Invoke();
                 Game1.playSound("bigSelect");

@@ -52,6 +52,7 @@ namespace VocabValley.Core.Reward
         public void setRandomNormalRewardCard()
         {
             Random rng = Game1.random;
+            type = "normal";
 
             cards = RewardConfig.NormalCards
                 .Except(cards)
@@ -61,7 +62,8 @@ namespace VocabValley.Core.Reward
         }
         public void setGrandRewardCard()
         {
-            
+            type = "grand";
+            cards = RewardConfig.GrandCards.ToList();
         }
         public void setCheatRewardCard()
         {
@@ -78,7 +80,7 @@ namespace VocabValley.Core.Reward
                 Game1.drawObjectDialogue("你已选择过奖励");
                 return;
             }
-            RewardPage rewardPage = new RewardPage(Helper, Monitor, "normal", shuffleCost);
+            RewardPage rewardPage = new RewardPage(Helper, Monitor, type, shuffleCost);
             rewardPage.cards = cards;
 
             rewardPage.RewardChosen += () =>

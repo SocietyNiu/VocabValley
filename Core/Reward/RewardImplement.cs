@@ -101,13 +101,13 @@ namespace VocabValley.Core.Reward
             return;
         }
 
-        public static void grandPoints(int amount)
+        public static void grantPoints(int amount)
         {
             if (!Context.IsWorldReady)
                 return;
         }
 
-        public static void grandRandomDiamond(int amount)
+        public static void grantRandomDiamond(int amount)
         {
             if (!Context.IsWorldReady)
                 return;
@@ -118,7 +118,7 @@ namespace VocabValley.Core.Reward
                 Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
         }
 
-        public static void grandDishes(int amount)
+        public static void grantDishes(int amount)
         {
             if (!Context.IsWorldReady)
                 return;
@@ -149,7 +149,7 @@ namespace VocabValley.Core.Reward
             }
         }
 
-        public static void grandMedicine(int amount)
+        public static void grantMedicine(int amount)
         {
             if (!Context.IsWorldReady)
                 return;
@@ -161,6 +161,41 @@ namespace VocabValley.Core.Reward
             item = new StardewValley.Object("351", amount);
             if (!Game1.player.addItemToInventoryBool(item, true))
                 Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+        }
+
+        public static void grantIridiumSprinklers(int amount = 99)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            var item = new StardewValley.Object("645", amount);
+            if (!Game1.player.addItemToInventoryBool(item, true))
+                Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+        }
+        public static void grantAllWarpTotems(int amount = 20)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            string[] itemIDs =
+            {
+                "688", 
+                "689", 
+                "690", 
+                "261", 
+                "886"  
+            };
+
+            foreach(var itemID in itemIDs)
+            {
+                var item = new StardewValley.Object(itemID, amount);
+                if (!Game1.player.addItemToInventoryBool(item, true))
+                    Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+            }
+        }
+        public static void doubleMoney()
+        {
+            Game1.player.Money *= 2;
         }
     }
 }

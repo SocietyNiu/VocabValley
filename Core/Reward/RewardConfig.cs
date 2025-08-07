@@ -30,24 +30,24 @@ namespace VocabValley.Core.Reward
             {
                 new RewardCard(
                     0,
-                    new RewardCard.Icon(RewardCardTexture, new Rectangle( 48,  0, 16, 16), 4f),
-                    "天气之子",
-                    "你的所有土地不用再浇水\n（包括温室和姜岛）",
-                    () =>{}
+                    new RewardCard.Icon(RewardCardTexture, new Rectangle( 16,  48, 16, 16), 5f),
+                    "解放双手",
+                    "你将获得99个铱制洒水器",
+                    () => RewardImplement.grantIridiumSprinklers(99)
                 ),
                 new RewardCard(
                     1,
-                    new RewardCard.Icon(RewardCardTexture, new Rectangle( 0,  16, 16, 16), 4f),
-                    "幸运儿",
-                    "你将一直保持好运",
-                    () =>{}
+                    new RewardCard.Icon(RewardCardTexture, new Rectangle( 32,  48, 16, 16), 5f),
+                    "效率至上",
+                    "获得农场、深山、沙滩、\n沙漠、姜岛传送图腾各20个",
+                    () => RewardImplement.grantAllWarpTotems(20)
                 ),
                 new RewardCard(
                     2,
-                    new RewardCard.Icon(RewardCardTexture, new Rectangle( 32,  0, 16, 16), 4f),
-                    "议价权",
-                    "你售出的所有商品售价\n提高5%",
-                    () =>{}
+                    new RewardCard.Icon(RewardCardTexture, new Rectangle( 32, 0, 16, 16), 5f),
+                    "大富翁",
+                    "你的金钱翻倍",
+                    () => RewardImplement.doubleMoney()
                 )
             };
             CheatCards = new[]
@@ -167,14 +167,14 @@ namespace VocabValley.Core.Reward
                     new RewardCard.Icon(tex, new Rectangle(16, 32, 16, 16), 3f),
                     "光芒",
                     $"随机获得{p+1}个相同的宝石\n（除五彩碎片）",
-                    () => RewardImplement.grandRandomDiamond(p+1)
+                    () => RewardImplement.grantRandomDiamond(p+1)
                 ),
                 new RewardCard(
                     8,
                     new RewardCard.Icon(tex, new Rectangle(32, 32, 16, 16), 3f),
                     "少食多餐",
                     $"随机获得{p+2}个相同的菜肴",
-                    () => RewardImplement.grandDishes(p+2)
+                    () => RewardImplement.grantDishes(p+2)
                 ),
                 new RewardCard(
                     9,
@@ -188,7 +188,7 @@ namespace VocabValley.Core.Reward
                     new RewardCard.Icon(tex, new Rectangle(0, 48, 16, 16), 3f),
                     "速效救心",
                     $"获得药物各{p}个",
-                    () => RewardImplement.grandMedicine(p)
+                    () => RewardImplement.grantMedicine(p)
                 )
            };
         }
