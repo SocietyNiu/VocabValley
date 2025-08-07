@@ -46,6 +46,7 @@ namespace VocabValley.Utils
         public void stop()
         {
             Helper.Events.GameLoop.OneSecondUpdateTicked -= onOneSecond;
+            updateCountDownEvent = null;
         }
         private void onOneSecond(object? sender, OneSecondUpdateTickedEventArgs e)
         {

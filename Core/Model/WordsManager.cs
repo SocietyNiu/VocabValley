@@ -94,12 +94,28 @@ namespace VocabValley.Core.Model
                    .OrderByDescending(word => word.wrongCount)
                    .ToList();
         }
-
         public List<Word> getWrongWords()
         {
             return wordsList
                    .Where(word => word.wrongCount > 0)
                    .OrderByDescending(word => word.wrongCount)
+                   .ToList();
+        }
+        public List<Word> getWrongWords(int count)
+        {
+            return wordsList
+                   .Where(word => word.wrongCount > 0)
+                   .OrderByDescending(word => word.wrongCount)
+                   .Take(count)
+                   .ToList();
+        }
+
+        public List<Word> getWrongWordsRandomly(int count)
+        {
+            return wordsList
+                   .Where(word => word.wrongCount > 0)
+                   .OrderBy(x => Guid.NewGuid())
+                   .Take(count)
                    .ToList();
         }
 
@@ -119,6 +135,13 @@ namespace VocabValley.Core.Model
                                .ToList()
                                .Count();
             return learnedCount.ToString() + "/" + totalCount.ToString();
+        }
+
+        public int getUnlearnedWordsCount()
+        {
+            return wordsList
+                   .Where(word => !word.isLearned)
+                   .ToList().Count();
         }
     }
 }

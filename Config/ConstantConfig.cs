@@ -15,7 +15,8 @@ namespace VocabValley.Config
             "BabelTowerStairLevel",
             "BabelTowerRewardLevel",
             "BabelTowerBossLevel",
-            "BabelTowerCellar"
+            "BabelTowerCellar",
+            "BabelTowerFinalBossLevel"
         };
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VocabValley.Core.Level;
 using VocabValley.Core.Model;
 using VocabValley.Core.Points;
 using VocabValley.Core.Reward;
@@ -25,17 +26,20 @@ namespace VocabValley.Core.Saving
         private SettingManager settingManager;
         private StatisticsManager statisticsManager;
         private RewardManager rewardManager;
+        private LevelManager levelManager;
 
         private Dictionary<int, SaveState> _progress = null!;
         private Config _config;
         private Dictionary<string, Dictionary<int, SaveState>> _allProgress;
+        private Dictionary<string, FinalProgress> _allFinalProgress;
+        private FinalProgress _finalProgress;
         private OtherState _otherState;
 
 
         public SavingManager(IModHelper helper, IMonitor monitor,
             VocabManager vocabManager, WordsManager wordsManager,
             PointsManager pointsManager, SettingManager settingManager,
-            StatisticsManager statisticsManager, RewardManager rewardManager)
+            StatisticsManager statisticsManager, RewardManager rewardManager, LevelManager levelManager)
         {
             Helper = helper;
             Monitor = monitor;
@@ -49,6 +53,7 @@ namespace VocabValley.Core.Saving
             this.rewardManager = rewardManager;
             this.settingManager = settingManager;
             this.statisticsManager = statisticsManager;
+            this.levelManager = levelManager;
 
             this.vocabManager.OnVocabChanged += (string fileName) =>
             {
@@ -105,6 +110,15 @@ namespace VocabValley.Core.Saving
             statisticsManager.statisticsState = _otherState.StatisticsState;
             rewardManager.premiumLevel = _otherState.PremiumLevel;
             rewardManager.updateNormalReward();
+
+            var allFinalProgress = Helper.Data.ReadSaveData<Dictionary<string, FinalProgress>>("allFinalProgress") ?? new();
+            _allFinalProgress = allFinalProgress;
+
+            if (!_allFinalProgress.TryGetValue(_config.fileName, out _finalProgress))
+                _finalProgress = new FinalProgress();
+
+            levelManager.finalProgress = _finalProgress;
+            levelManager.updateFinalProgress();
         }
 
         public void onSaving(object? s, SavingEventArgs e)
@@ -119,6 +133,7 @@ namespace VocabValley.Core.Saving
                 };
             }
 
+
             _config.fileName = vocabManager.vocabChosen;
             _config.SettingState = settingManager.settingState;
             Helper.Data.WriteSaveData("config", _config);
@@ -131,12 +146,16 @@ namespace VocabValley.Core.Saving
             _otherState.PremiumLevel = rewardManager.premiumLevel;
             Helper.Data.WriteSaveData("otherState", _otherState);
 
+            _finalProgress = levelManager.finalProgress;
+            _allFinalProgress[_config.fileName] = _finalProgress;
+            Helper.Data.WriteSaveData("allFinalProgress", _allFinalProgress);
         }
         public void updateProgress(string fileName)
         {
             flushWords2Progress();
             // 先把现在的词库数据存入Cache
             _allProgress[_config.fileName] = _progress;
+            _allFinalProgress[_config.fileName] = _finalProgress;
 
             // 从cache中抽出对应词库的记录, 没有则新建
             if (!_allProgress.TryGetValue(fileName, out _progress))
@@ -164,8 +183,12 @@ namespace VocabValley.Core.Saving
                 }
             }
 
-            _config.fileName = fileName;
+            if (!_allFinalProgress.TryGetValue(fileName, out _finalProgress))
+                _finalProgress = new FinalProgress();
 
+            levelManager.finalProgress = _finalProgress;
+            levelManager.updateFinalProgress();
+            _config.fileName = fileName;
         }
 
         private void flushWords2Progress()

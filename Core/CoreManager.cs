@@ -77,7 +77,7 @@ namespace VocabValley.Core
             rewardManager = new RewardManager(Helper, Monitor, pointsManager);
             levelManager = new LevelManager(Helper, Monitor, wordsManager, 30, rewardManager, settingManager);
             statisticsManager = new StatisticsManager(Helper, Monitor, wordsManager);
-            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager, rewardManager);
+            savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager, rewardManager, levelManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager, settingManager);
             
         }
