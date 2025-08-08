@@ -74,7 +74,7 @@ namespace VocabValley.Core.Reward
             }
         }
 
-        public static void grantLuckBuff(IModHelper Helper,int amount)
+        public static void grantLuckBuff(IModHelper Helper,float amount)
         {
             if (!Context.IsWorldReady)
                 return;
@@ -87,7 +87,7 @@ namespace VocabValley.Core.Reward
                 duration: Buff.ENDLESS,
                 effects: new BuffEffects()
                 {
-                    LuckLevel = { 3.0f }
+                    LuckLevel = { amount }
                 }
             );
 

@@ -113,17 +113,17 @@ namespace VocabValley.Core.Reward
         {
             if (premiumLevel >= 5)
             {
-                Game1.drawObjectDialogue("您已达到最高等级");
+                Game1.drawObjectDialogue("您已达到最高奖励等级");
                 return;
             }
 
             if(pointsManager.points < premiumPrice)
             {
-                Game1.drawObjectDialogue($"升级需要{premiumPrice}知识碎片");
+                Game1.drawObjectDialogue($"你现在的奖励等级为:{premiumLevel},升级需要{premiumPrice}知识碎片");
                 return;
             } else
             {
-                string Question = $"你想用{premiumPrice}知识碎片升级吗?";
+                string Question = $"你现在的奖励等级为:{premiumLevel},你想用{premiumPrice}知识碎片升级吗?";
                 Response[] opts = {
                     new("YES", "是的"),
                     new("NO",  "我再想想")

@@ -151,8 +151,14 @@ namespace VocabValley.Core.Level
                 // 答错则标记没学过重新学习
                 word.isLearned = false;
                 word.wrongCount++;
-            }   
-            word.reviewCount++;
+                word.reviewCount = 0;
+                return;
+            }
+            else
+            {
+                word.reviewCount++;
+                return;
+            }
         }
 
         void OnMenuChanged(object? sender, MenuChangedEventArgs e)

@@ -51,6 +51,9 @@ namespace VocabValley.Core
         // 统计数据管理器
         private StatisticsManager statisticsManager = null;
 
+        //
+        private DebugManager debugManager = null;
+
         public CoreManager(IModHelper helper, IMonitor monitor)
         {
             Helper = helper;
@@ -79,7 +82,7 @@ namespace VocabValley.Core
             statisticsManager = new StatisticsManager(Helper, Monitor, wordsManager);
             savingManager = new SavingManager(Helper, Monitor, vocabManager, wordsManager, pointsManager, settingManager, statisticsManager, rewardManager, levelManager);
             cellarManager = new CellarManager(Helper, Monitor, pointsManager, settingManager);
-            
+            debugManager = new DebugManager(pointsManager);
         }
 
         public void onSaveLoaded(object? s, SaveLoadedEventArgs e)

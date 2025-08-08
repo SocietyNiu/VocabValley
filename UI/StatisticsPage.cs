@@ -62,7 +62,7 @@ namespace VocabValley.UI
             );
 
             // 花费的时间
-            b.DrawString(Game1.dialogueFont, "你学习该词库的总时长为：", new Vector2(xPositionOnScreen + 100, yPositionOnScreen + 100), Color.Black);
+            b.DrawString(Game1.dialogueFont, "你学习的总时长为：", new Vector2(xPositionOnScreen + 100, yPositionOnScreen + 100), Color.Black);
             b.DrawString(Game1.dialogueFont, CustomTool.Time2String(statisticsState.totalSeconds), new Vector2(xPositionOnScreen + 500, yPositionOnScreen + 100), Color.Red);
 
             // 普通层
