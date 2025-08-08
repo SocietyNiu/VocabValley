@@ -147,7 +147,11 @@ namespace VocabValley.Core.Level
         public void updateProgress(Word word, bool answerIsCorrect)
         {
             if (!answerIsCorrect)
+            {
+                // 答错则标记没学过重新学习
+                word.isLearned = false;
                 word.wrongCount++;
+            }   
             word.reviewCount++;
         }
 

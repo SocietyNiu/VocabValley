@@ -1,8 +1,8 @@
 {
   "Name": "VocabValley",
   "Author": "Haha Gaming",
-  "Version": "0.0.3",
-  "Description": "增加爬塔设置",
+  "Version": "1.0.0",
+  "Description": "正式版上线",
   "UniqueID": "HahaGaming.VocabValley",
   "EntryDll": "VocabValley.dll",
   "MinimumApiVersion": "4.0.0",
