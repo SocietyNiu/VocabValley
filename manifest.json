@@ -6,5 +6,5 @@
   "UniqueID": "HahaGaming.VocabValley",
   "EntryDll": "VocabValley.dll",
   "MinimumApiVersion": "4.0.0",
-  "UpdateKeys": []
+  "UpdateKeys": [ "Nexus:36259" ]
 }
